@@ -36,8 +36,8 @@
 <a href="https://twitter.com/rutamstwt"><img src="https://img.shields.io/badge/follow%20me%20on-twitter-blue?style=flat&logo=twitter">
   
 <!-- Github Stats -->
-![Rutam's stats 1](https://raw.githubusercontent.com/RutamBhagat/github-stats/master/generated/languages.svg#gh-dark-mode-only)
-![Rutam's stats 2](https://raw.githubusercontent.com/RutamBhagat/github-stats/master/generated/languages.svg#gh-light-mode-only)
+![Rutam's stats 1](https://raw.githubusercontent.com/username/github-stats/master/generated/languages.svg#gh-dark-mode-only)
+![Rutam's stats 2](https://raw.githubusercontent.com/username/github-stats/master/generated/languages.svg#gh-light-mode-only)
 
 <!-- Github Stats -->
 
