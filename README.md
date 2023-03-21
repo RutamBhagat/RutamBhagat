@@ -37,5 +37,5 @@ Currently, I'm working as a Next.js developer with internship experience to work
 
 <!-- Github Stats -->
 
-![Rutam's Stats](https://raw.githubusercontent.com/RutamBhagat/github-stats/master/generated/overview.svg#gh-dark-mode-only)
-![Rutam's Stats 2](https://raw.githubusercontent.com/RutamBhagat/github-stats/master/generated/languages.svg#gh-dark-mode-only)
+[![Rutam's github activity graph](https://github-readme-activity-graph.cyclic.app/graph?username=RutamBhagat&theme=react)](https://github.com/ashutosh00710/github-readme-activity-graph)
+
