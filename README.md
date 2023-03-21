@@ -1,61 +1,41 @@
-### RUTAM BHAGAT:
+<!-- This is Header -->
+<h1>🙋‍♂️ Hey there! </h1>
 
-Hello 👋🏻, I'm Rutam Bhagat, a Full Stack Developer who is interested in Next.js and the T3 stack. Preferred pronouns: He/Him/His
+<!-- Introduction -->
 
-Currently, I'm working as a Next.js developer with internship experience to work with industry experts in : **Web development, Back-End Development** 👩🏻‍💻 . I have worked on projects that provides a scalable, performant, consistent and rich experience to users. I primarily deal with technologies like ⚡ **JAVASCRIPT, TYPESCRIPT, NEXT, REACT, POSTGRESQL , PRISMA, tRPC**.
-I am open source enthusiast. I have strong knowledge in **Data structures and algorithms using Java**.
+- <b> I'm Rutam (he/him),</b> Bachelors of Engineering Graduate
 
-- 👯 I’m looking to collaborate with Fullstack Web Developers.
-- 🤔 I’m always ready for Open source Contribution.
-- 💬 Ask me about Fullstack Development.
-- 💬 possess good knowledge in Data Structures and Algorithms.
-- reach out to me on rutambhagat@gmail.com.
+Currently, I'm working as a Next.js developer with internship experience to work with industry experts in : **Web development, Back-End Development** 👩🏻‍💻 . 
 
-<br/>
+- Worked on projects that provides a scalable, performant, consistent and rich experience to users. 
 
-<details>
-<summary>
-Languages and Tools🛠:
-</summary>
-  <br/>
-<code>Html</code>
-<code>CSS</code>
-<code>JavaScript</code>
-<code>React</code>
-<code>Next</code>
-<code>Postgresql</code> 
-<code>Nodejs</code>
-<code>Github</code>
-<code>Postman</code>
-<code>Prisma</code>
-<code>Firebase</code>
-<code>Bootstrap</code>
-<code>Tailwind</code>
-<code>React Query</code>
-<code>tRPC</code>
-</details>
+- Primarily deal with technologies like ⚡ **JAVASCRIPT, TYPESCRIPT, NEXT, REACT, POSTGRESQL , PRISMA, tRPC**.
 
-<details>
-<summary> Connect with me🤝: </summary>
+- Open source enthusiast. 
 
-<br/>
+- Always ready for Open source Contribution.
 
-<a href="https://github.com/RutamBhagat">
-  <img align="left" alt="Rutam's Github" width="22px" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Github-desktop-logo-symbol.svg/1024px-Github-desktop-logo-symbol.svg.png" />
-</a>
+- Strong knowledge in **Data structures and algorithms using Java**.
 
-<a href="https://www.linkedin.com/in/rutam-bhagat/">
-  <img align="left" alt="Rutam's Linkdein" width="22px" src="https://cdn3.iconfinder.com/data/icons/inficons/512/linkedin.png" />
-</a>
-  
-  <a href="https://leetcode.com/rutambhagat">
-  <img align="left" alt="leetcode" width="22px" src="https://tse2.mm.bing.net/th?id=OIP.5sfi252DgFWnuwUNHhwlXwAAAA&pid=Api&P=0" />
-</a>
+- Contributing to multiple <b>open-source</b> projects.
 
-<br/>
+- Learning and sharing my progress in public on twitter.</a>
 
-</details>
-  
-### Show ❤️ by 🌟 my [repositories](https://github.com/RutamBhagat?tab=repositories)!
+- Continuously learning and engaging with the tech community.
 
-</div>
+- I’m looking to collaborate with Fullstack Web Developers.
+
+- Reach out to me on rutambhagat@gmail.com.
+
+<!-- My Skills -->
+
+[![My Skills](https://skillicons.dev/icons?i=html,css,js,ts,python,java,nextjs,react,tailwind,express,nodejs,prisma,redux,postgres,firebase,git,github&perline=8)](https://skillicons.dev)
+
+<!-- Socials stats -->
+
+<a href="https://twitter.com/rutamstwt"><img src="https://img.shields.io/badge/follow%20me%20on-twitter-blue?style=flat&logo=twitter">
+
+<!-- Github Stats -->
+
+![Rutam's Stats](https://raw.githubusercontent.com/RutamBhagat/github-stats/master/generated/overview.svg#gh-dark-mode-only)
+![Rutam's Stats 2](https://raw.githubusercontent.com/RutamBhagat/github-stats/master/generated/languages.svg#gh-dark-mode-only)
