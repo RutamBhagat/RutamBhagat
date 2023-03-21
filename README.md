@@ -5,7 +5,7 @@
 
 - <b> I'm Rutam (he/him),</b> Bachelors of Engineering Graduate
 
-Currently, I'm working as a Next.js developer with internship experience to work with industry experts in : **Web development, Back-End Development** 👩🏻‍💻 . 
+- Currently, I'm working as a Next.js developer with internship experience to work with industry experts in : **Web development, Back-End Development** 👩🏻‍💻 . 
 
 - Worked on projects that provides a scalable, performant, consistent and rich experience to users. 
 
