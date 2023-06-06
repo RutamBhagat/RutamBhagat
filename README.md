@@ -39,7 +39,3 @@
 ![](https://raw.githubusercontent.com/RutamBhagat/github_stats/master/generated/overview.svg#gh-dark-mode-only)
 ![](https://raw.githubusercontent.com/RutamBhagat/github_stats/master/generated/languages.svg#gh-dark-mode-only)
 
-<!-- Github Stats -->
-
-[![Rutam's github activity graph](https://github-readme-activity-graph.cyclic.app/graph?username=RutamBhagat&theme=react)](https://github.com/ashutosh00710/github-readme-activity-graph)
-
