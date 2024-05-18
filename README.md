@@ -1,32 +1,40 @@
-<!-- This is Header -->
-<h1>🙋‍♂️ Hey there! </h1>
+<!-- Header -->
+# 🙋‍♂️ Hey there! I'm Rutam (he/him)
 
 <!-- Introduction -->
+I'm a Bachelor of Engineering graduate and a seasoned Next.js developer with internship experience working with industry experts in web development and back-end development. I'm passionate about building scalable, performant, and consistent applications that provide a rich user experience.
 
-- <b> I'm Rutam (he/him),</b> Bachelors of Engineering Graduate
+<!-- Technical Skills -->
+I specialize in:
+* **JavaScript**, **TypeScript**, **Next**, **React**, **PostgreSQL**, **Prisma**, and **tRPC**
+* **LangChain Development Services**, including Retrieval-Augmented Generation (RAG) applications, chat applications, personalized recommendation systems, question answering and knowledge graph applications, and multi-actor applications
 
-- Currently, I'm working as a Next.js developer with internship experience to work with industry experts in : **Web development, Back-End Development** 👩🏻‍💻 . 
+<!-- About My Services -->
+As a LangChain developer, I offer a range of services that utilize large language models to develop innovative applications. These services include:
 
-- Worked on projects that provides a scalable, performant, consistent and rich experience to users. 
+### RAG Applications
+Combining LLMs with structured data to generate responses for document summarization, semi-structured data processing, and image and text-based applications
 
-- Primarily deal with technologies like ⚡ **JAVASCRIPT, TYPESCRIPT, NEXT, REACT, POSTGRESQL , PRISMA, tRPC**.
+### Chat Applications and Conversational AI
+Building chat applications that integrate with SQL databases for customer support, sales and marketing automation, and virtual assistants
 
-- Open source enthusiast. 
+### Personalized Recommendation Applications
+Developing personalized recommendation systems that leverage LangChain and Amazon Personalize for e-commerce, content streaming, and healthcare
 
-- Always ready for Open source Contribution.
+### Question Answering and Knowledge Graph Applications
+Creating question answering applications that utilize LangChain to retrieve answers from large knowledge graphs for customer support, knowledge management, and educational institutions
 
-- Strong knowledge in **Data structures and algorithms using Java**.
+### Multi-Actor Applications and Agent-Based Systems
+Designing and developing multi-actor applications that model complex systems and interactions for autonomous systems, supply chain management, and financial modeling
 
-- Contributing to multiple <b>open-source</b> projects.
+### Custom LangChain Development and Integration
+Offering custom LangChain development and integration services to integrate LangChain with existing infrastructure and systems
 
-- Learning and sharing my progress in public on twitter.</a>
+<!-- Open Source and Community -->
+I'm an open-source enthusiast and contribute to multiple open-source projects. I'm always looking to collaborate with full-stack web developers and share my progress on Twitter.
 
-- Continuously learning and engaging with the tech community.
-
-- I’m looking to collaborate with Fullstack Web Developers.
-
-- Reach out to me on rutambhagat@gmail.com.
-
+<!-- Contact Information -->
+If you're interested in learning more about my LangChain development services, please contact me at [rutambhagat@gmail.com](mailto:rutambhagat@gmail.com) to discuss your project requirements.
 <!-- My Skills -->
 
 [![My Skills](https://skillicons.dev/icons?i=html,css,js,ts,python,java,nextjs,react,tailwind,express,nodejs,prisma,redux,postgres,firebase,git,github&perline=8)](https://skillicons.dev)
