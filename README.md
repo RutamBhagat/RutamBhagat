@@ -2,7 +2,7 @@
 # 🙋‍♂️ Hey there! I'm Rutam (he/him)
 
 <!-- Introduction -->
-I'm a Bachelor of Engineering graduate and a seasoned Next.js developer with internship experience working with industry experts in web development and back-end development. I'm passionate about building scalable, performant, and consistent applications that provide a rich user experience.
+I'm a Bachelor of Engineering graduate and a seasoned Next.js developer with 6 months of experience working with industry experts in web development and back-end development. I'm passionate about building scalable, performant, and consistent applications that provide a rich user experience.
 
 <!-- Technical Skills -->
 I specialize in:
