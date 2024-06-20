@@ -35,9 +35,6 @@ I'm an open-source enthusiast and contribute to multiple open-source projects. I
 
 <!-- Contact Information -->
 If you're interested in learning more about my LangChain development services, please contact me at [rutambhagat@gmail.com](mailto:rutambhagat@gmail.com) to discuss your project requirements.
-<!-- My Skills -->
-
-[![My Skills](https://skillicons.dev/icons?i=html,css,js,ts,python,java,nextjs,react,tailwind,express,nodejs,prisma,redux,postgres,firebase,git,github&perline=8)](https://skillicons.dev)
 
 <!-- Socials stats -->
 
