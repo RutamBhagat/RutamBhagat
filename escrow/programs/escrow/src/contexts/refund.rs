@@ -1,7 +1,10 @@
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token_interface::{transfer_checked, Mint, TokenAccount, TokenInterface, TransferChecked},
+    token_interface::{
+        close_account, transfer_checked, CloseAccount, Mint, TokenAccount, TokenInterface,
+        TransferChecked,
+    },
 };
 
 use crate::Escrow;
@@ -46,24 +49,46 @@ pub struct Refund<'info> {
 }
 
 impl<'info> Refund<'info> {
-    pub fn withdraw_and_close(&self) -> Result<()> {
+    pub fn withdraw(&self) -> Result<()> {
+        let program = self.token_program.to_account_info();
+        let accounts = TransferChecked {
+            mint: self.mint_a.to_account_info(),
+            from: self.vault.to_account_info(),
+            to: self.maker_ata_a.to_account_info(),
+            authority: self.escrow.to_account_info(),
+        };
+
+        let seed = &self.escrow.seed.to_le_bytes();
+        let binding = &[self.escrow.bump];
         let signer_seeds: &[&[&[u8]]] = &[&[
             b"escrow",
             self.maker.to_account_info().key.as_ref(),
-            &[self.escrow.bump],
+            seed,
+            binding,
         ]];
 
-        let accounts = TransferChecked {
-            from: self.vault.to_account_info(),
-            to: self.maker_ata_a.to_account_info(),
-            mint: self.mint_a.to_account_info(),
+        let ctx = CpiContext::new_with_signer(program, accounts, signer_seeds);
+        transfer_checked(ctx, self.vault.amount, self.mint_a.decimals)
+    }
+
+    pub fn close(&self) -> Result<()> {
+        let accounts = CloseAccount {
+            account: self.vault.to_account_info(),
+            destination: self.maker.to_account_info(),
             authority: self.escrow.to_account_info(),
         };
-        let ctx = CpiContext::new_with_signer(
-            self.token_program.to_account_info(),
-            accounts,
-            signer_seeds,
-        );
-        transfer_checked(ctx, self.escrow.receive, self.mint_a.decimals)
+
+        let seed = &self.escrow.seed.to_le_bytes();
+        let binding = &[self.escrow.bump];
+        let signer_seeds: &[&[&[u8]]] = &[&[
+            b"escrow",
+            self.maker.to_account_info().key.as_ref(),
+            seed,
+            binding,
+        ]];
+
+        let program = self.token_program.to_account_info();
+        let ctx = CpiContext::new_with_signer(program, accounts, signer_seeds);
+        close_account(ctx)
     }
 }
