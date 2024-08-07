@@ -20,7 +20,6 @@ pub mod vault {
         Ok(())
     }
 
-    // TODO: Withdraw funds from vault
     pub fn withdraw(ctx: Context<Payment>, amount: u64) -> Result<()> {
         ctx.accounts.withdraw(amount)?;
         Ok(())
@@ -38,9 +37,9 @@ pub struct Initialize<'info> {
     #[account(
         init,
         payer = user,
+        space = VaultState::INIT_SPACE,
         seeds = [b"state", user.key().as_ref()],
-        bump,
-        space = VaultState::INIT_SPACE
+        bump
     )]
     pub vault_state: Account<'info, VaultState>,
     #[account(
@@ -69,16 +68,16 @@ pub struct Payment<'info> {
     #[account(mut)]
     pub user: Signer<'info>,
     #[account(
+        seeds = [b"state", user.key().as_ref()],
+        bump = vault_state.state_bump
+    )]
+    pub vault_state: Account<'info, VaultState>,
+    #[account(
         mut,
         seeds = [b"vault", vault_state.key().as_ref()],
         bump = vault_state.vault_bump
     )]
     pub vault: SystemAccount<'info>,
-    #[account(
-        seeds = [b"state", user.key().as_ref()],
-        bump = vault_state.state_bump
-    )]
-    pub vault_state: Account<'info, VaultState>,
     pub system_program: Program<'info, System>,
 }
 
@@ -117,7 +116,8 @@ impl<'info> Payment<'info> {
 
         let vault_bump = self.vault_state.vault_bump;
         let vault_state_key = self.vault_state.key();
-        let signer_seeds: &[&[&[u8]]] = &[&[b"vault", vault_state_key.as_ref(), &[vault_bump]]];
+        let signer = [b"vault", vault_state_key.as_ref(), &[vault_bump]];
+        let signer_seeds = &[&signer[..]];
 
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
         transfer(cpi_ctx, amount)?;
@@ -131,22 +131,27 @@ pub struct CloseAccount<'info> {
     pub user: Signer<'info>,
     #[account(
         mut,
+        close = user,
+        seeds = [b"state", user.key().as_ref()],
+        bump = vault_state.state_bump,
+    )]
+    pub vault_state: Account<'info, VaultState>,
+    #[account(
+        mut,
         seeds = [b"vault", vault_state.key().as_ref()],
         bump = vault_state.vault_bump
     )]
     pub vault: SystemAccount<'info>,
-    #[account(
-        mut,
-        seeds = [b"state", user.key().as_ref()],
-        bump = vault_state.state_bump,
-        close = user
-    )]
-    pub vault_state: Account<'info, VaultState>,
     pub system_program: Program<'info, System>,
 }
 
 impl<'info> CloseAccount<'info> {
     pub fn close(&mut self) -> Result<()> {
+        let current_time = Clock::get()?.unix_timestamp;
+        if current_time < self.vault_state.unlock_time {
+            return Err(VaultError::VaultLocked.into());
+        }
+
         let vault_balance = self.vault.lamports();
         if vault_balance > 0 {
             let cpi_program = self.system_program.to_account_info();
@@ -156,7 +161,8 @@ impl<'info> CloseAccount<'info> {
             };
             let vault_bump = self.vault_state.vault_bump;
             let vault_state_key = self.vault_state.key();
-            let signer_seeds: &[&[&[u8]]] = &[&[b"vault", vault_state_key.as_ref(), &[vault_bump]]];
+            let signer = [b"vault", vault_state_key.as_ref(), &[vault_bump]];
+            let signer_seeds = &[&signer[..]];
             let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
             transfer(cpi_ctx, vault_balance)?;
         }

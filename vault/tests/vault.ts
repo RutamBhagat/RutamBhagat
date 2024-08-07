@@ -1,6 +1,6 @@
 import * as anchor from "@coral-xyz/anchor";
 
-import { LAMPORTS_PER_SOL, PublicKey, SystemProgram } from "@solana/web3.js";
+import { LAMPORTS_PER_SOL, PublicKey } from "@solana/web3.js";
 
 import { Keypair } from "@solana/web3.js";
 import { Program } from "@coral-xyz/anchor";
