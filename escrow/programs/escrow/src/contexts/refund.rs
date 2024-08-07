@@ -1,3 +1,4 @@
+use crate::Escrow;
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
@@ -7,7 +8,6 @@ use anchor_spl::{
     },
 };
 
-use crate::Escrow;
 #[derive(Accounts)]
 pub struct Refund<'info> {
     #[account(mut)]
@@ -50,8 +50,8 @@ pub struct Refund<'info> {
 
 impl<'info> Refund<'info> {
     pub fn withdraw(&self) -> Result<()> {
-        let program = self.token_program.to_account_info();
-        let accounts = TransferChecked {
+        let cpi_program = self.token_program.to_account_info();
+        let cpi_accounts = TransferChecked {
             mint: self.mint_a.to_account_info(),
             from: self.vault.to_account_info(),
             to: self.maker_ata_a.to_account_info(),
@@ -67,12 +67,12 @@ impl<'info> Refund<'info> {
             binding,
         ]];
 
-        let ctx = CpiContext::new_with_signer(program, accounts, signer_seeds);
-        transfer_checked(ctx, self.vault.amount, self.mint_a.decimals)
+        let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
+        transfer_checked(cpi_ctx, self.vault.amount, self.mint_a.decimals)
     }
 
     pub fn close(&self) -> Result<()> {
-        let accounts = CloseAccount {
+        let cpi_accounts = CloseAccount {
             account: self.vault.to_account_info(),
             destination: self.maker.to_account_info(),
             authority: self.escrow.to_account_info(),
@@ -87,8 +87,8 @@ impl<'info> Refund<'info> {
             binding,
         ]];
 
-        let program = self.token_program.to_account_info();
-        let ctx = CpiContext::new_with_signer(program, accounts, signer_seeds);
-        close_account(ctx)
+        let cpi_program = self.token_program.to_account_info();
+        let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
+        close_account(cpi_ctx)
     }
 }
