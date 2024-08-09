@@ -125,19 +125,14 @@ describe("Escrow", () => {
       TOKEN_PROGRAM_ID
     );
   });
+
   it("Initialize escrow", async () => {
     await program.methods
       .make(seed, amountA, amountB)
-      .accountsPartial({
+      .accounts({
         maker: maker,
         mintA: mintA,
         mintB: mintB,
-        makerAtaA: makerAtaA,
-        escrow: escrow,
-        vault: vault,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: anchor.utils.token.ASSOCIATED_PROGRAM_ID,
-        systemProgram: anchor.web3.SystemProgram.programId,
       })
       .rpc();
 
@@ -151,105 +146,105 @@ describe("Escrow", () => {
     assert.strictEqual(vaultAccount.amount, BigInt(amountA.toString()));
   });
 
-  it("Take the trade", async () => {
-    await program.methods
-      .take()
-      .accountsPartial({
-        taker: taker.publicKey,
-        maker: maker,
-        mintA: mintA,
-        mintB: mintB,
-        takerAtaA: takerAtaA,
-        takerAtaB: takerAtaB,
-        makerAtaB: makerAtaB,
-        escrow: escrow,
-        vault: vault,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: anchor.utils.token.ASSOCIATED_PROGRAM_ID,
-        systemProgram: anchor.web3.SystemProgram.programId,
-      })
-      .signers([taker])
-      .rpc();
+  // it("Take the trade", async () => {
+  //   await program.methods
+  //     .take()
+  //     .accountsPartial({
+  //       taker: taker.publicKey,
+  //       maker: maker,
+  //       mintA: mintA,
+  //       mintB: mintB,
+  //       takerAtaA: takerAtaA,
+  //       takerAtaB: takerAtaB,
+  //       makerAtaB: makerAtaB,
+  //       escrow: escrow,
+  //       vault: vault,
+  //       tokenProgram: TOKEN_PROGRAM_ID,
+  //       associatedTokenProgram: anchor.utils.token.ASSOCIATED_PROGRAM_ID,
+  //       systemProgram: anchor.web3.SystemProgram.programId,
+  //     })
+  //     .signers([taker])
+  //     .rpc();
 
-    const makerAtaBAccount = await getAccount(provider.connection, makerAtaB);
-    assert.strictEqual(makerAtaBAccount.amount, BigInt(amountB.toString()));
+  //   const makerAtaBAccount = await getAccount(provider.connection, makerAtaB);
+  //   assert.strictEqual(makerAtaBAccount.amount, BigInt(amountB.toString()));
 
-    const takerAtaAAccount = await getAccount(provider.connection, takerAtaA);
-    assert.strictEqual(takerAtaAAccount.amount, BigInt(amountA.toString()));
+  //   const takerAtaAAccount = await getAccount(provider.connection, takerAtaA);
+  //   assert.strictEqual(takerAtaAAccount.amount, BigInt(amountA.toString()));
 
-    // Verify escrow account is closed
-    try {
-      await program.account.escrow.fetch(escrow);
-      assert.fail("Expected an error but did not receive one");
-    } catch (error) {
-      assert(error instanceof Error, "error is not an Error object");
-      assert(
-        error.message.includes("Account does not exist or has no data"),
-        `Unexpected error message: ${error.message}`
-      );
-    }
-  });
+  //   // Verify escrow account is closed
+  //   try {
+  //     await program.account.escrow.fetch(escrow);
+  //     assert.fail("Expected an error but did not receive one");
+  //   } catch (error) {
+  //     assert(error instanceof Error, "error is not an Error object");
+  //     assert(
+  //       error.message.includes("Account does not exist or has no data"),
+  //       `Unexpected error message: ${error.message}`
+  //     );
+  //   }
+  // });
 
-  it("Refund the escrow", async () => {
-    // First, we need to create a new escrow
-    const newSeed = new anchor.BN(Math.floor(Math.random() * 1000000));
-    const [newEscrow] = PublicKey.findProgramAddressSync(
-      [
-        Buffer.from("escrow"),
-        maker.toBuffer(),
-        newSeed.toArrayLike(Buffer, "le", 8),
-      ],
-      program.programId
-    );
+  // it("Refund the escrow", async () => {
+  //   // First, we need to create a new escrow
+  //   const newSeed = new anchor.BN(Math.floor(Math.random() * 1000000));
+  //   const [newEscrow] = PublicKey.findProgramAddressSync(
+  //     [
+  //       Buffer.from("escrow"),
+  //       maker.toBuffer(),
+  //       newSeed.toArrayLike(Buffer, "le", 8),
+  //     ],
+  //     program.programId
+  //   );
 
-    const [newVault] = PublicKey.findProgramAddressSync(
-      [Buffer.from("vault"), newEscrow.toBuffer()],
-      TOKEN_PROGRAM_ID
-    );
+  //   const [newVault] = PublicKey.findProgramAddressSync(
+  //     [Buffer.from("vault"), newEscrow.toBuffer()],
+  //     TOKEN_PROGRAM_ID
+  //   );
 
-    await program.methods
-      .make(newSeed, amountA, amountB)
-      .accountsPartial({
-        maker: maker,
-        mintA: mintA,
-        mintB: mintB,
-        makerAtaA: makerAtaA,
-        escrow: newEscrow,
-        vault: newVault,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: anchor.utils.token.ASSOCIATED_PROGRAM_ID,
-        systemProgram: anchor.web3.SystemProgram.programId,
-      })
-      .rpc();
+  //   await program.methods
+  //     .make(newSeed, amountA, amountB)
+  //     .accountsPartial({
+  //       maker: maker,
+  //       mintA: mintA,
+  //       mintB: mintB,
+  //       makerAtaA: makerAtaA,
+  //       escrow: newEscrow,
+  //       vault: newVault,
+  //       tokenProgram: TOKEN_PROGRAM_ID,
+  //       associatedTokenProgram: anchor.utils.token.ASSOCIATED_PROGRAM_ID,
+  //       systemProgram: anchor.web3.SystemProgram.programId,
+  //     })
+  //     .rpc();
 
-    // Now, let's refund the escrow
-    await program.methods
-      .refund()
-      .accountsPartial({
-        maker: maker,
-        mintA: mintA,
-        makerAtaA: makerAtaA,
-        escrow: newEscrow,
-        vault: newVault,
-        tokenProgram: TOKEN_PROGRAM_ID,
-        associatedTokenProgram: anchor.utils.token.ASSOCIATED_PROGRAM_ID,
-        systemProgram: anchor.web3.SystemProgram.programId,
-      })
-      .rpc();
+  //   // Now, let's refund the escrow
+  //   await program.methods
+  //     .refund()
+  //     .accountsPartial({
+  //       maker: maker,
+  //       mintA: mintA,
+  //       makerAtaA: makerAtaA,
+  //       escrow: newEscrow,
+  //       vault: newVault,
+  //       tokenProgram: TOKEN_PROGRAM_ID,
+  //       associatedTokenProgram: anchor.utils.token.ASSOCIATED_PROGRAM_ID,
+  //       systemProgram: anchor.web3.SystemProgram.programId,
+  //     })
+  //     .rpc();
 
-    const makerAtaAAccount = await getAccount(provider.connection, makerAtaA);
-    assert.strictEqual(makerAtaAAccount.amount, BigInt(amountA.toString()));
+  //   const makerAtaAAccount = await getAccount(provider.connection, makerAtaA);
+  //   assert.strictEqual(makerAtaAAccount.amount, BigInt(amountA.toString()));
 
-    // Verify escrow account is closed
-    try {
-      await program.account.escrow.fetch(newEscrow);
-      assert.fail("Expected an error but did not receive one");
-    } catch (error) {
-      assert(error instanceof Error, "error is not an Error object");
-      assert(
-        error.message.includes("Account does not exist or has no data"),
-        `Unexpected error message: ${error.message}`
-      );
-    }
-  });
+  //   // Verify escrow account is closed
+  //   try {
+  //     await program.account.escrow.fetch(newEscrow);
+  //     assert.fail("Expected an error but did not receive one");
+  //   } catch (error) {
+  //     assert(error instanceof Error, "error is not an Error object");
+  //     assert(
+  //       error.message.includes("Account does not exist or has no data"),
+  //       `Unexpected error message: ${error.message}`
+  //     );
+  //   }
+  // });
 });

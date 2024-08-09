@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token_interface::{Mint, TokenAccount, TokenInterface},
+    token_interface::{Mint, TokenAccount, TokenInterface, TransferChecked, transfer_checked, MintTo, mint_to},
 };
 
 use crate::Config;
@@ -10,12 +10,12 @@ use crate::Config;
 #[instruction(seed: u64)]
 pub struct Initialize<'info> {
     #[account(mut)]
-    signer: Signer<'info>,
+    maker: Signer<'info>,
     mint_x: InterfaceAccount<'info, Mint>,
     mint_y: InterfaceAccount<'info, Mint>,
     #[account(
         init,
-        payer = signer,
+        payer = maker,
         space = 8 + Config::INIT_SPACE,
         seeds = [b"amm", mint_x.key().as_ref(), mint_y.key().as_ref(), seed.to_le_bytes().as_ref()],
         bump,
@@ -23,7 +23,7 @@ pub struct Initialize<'info> {
     config: Account<'info, Config>,
     #[account(
         init_if_needed,
-        payer = signer,
+        payer = maker,
         mint::authority = config,
         mint::decimals = 6,
         mint::token_program = token_program,
@@ -33,22 +33,49 @@ pub struct Initialize<'info> {
     mint_lp: InterfaceAccount<'info, Mint>,
     #[account(
         init_if_needed,
-        payer = signer,
+        payer = maker,
         associated_token::mint = mint_x,
         associated_token::authority = config,
         associated_token::token_program = token_program,
 
     )]
     vault_x: InterfaceAccount<'info, TokenAccount>,
-        #[account(
+    #[account(
         init_if_needed,
-        payer = signer,
+        payer = maker,
         associated_token::mint = mint_y,
         associated_token::authority = config,
         associated_token::token_program = token_program,
         
     )]
     vault_y: InterfaceAccount<'info, TokenAccount>,
+    #[account(
+        init_if_needed,
+        payer = maker,
+        associated_token::mint = mint_x,
+        associated_token::authority = maker,
+        associated_token::token_program = token_program,
+
+    )]
+    maker_ata_x: InterfaceAccount<'info, TokenAccount>,
+    #[account(
+        init_if_needed,
+        payer = maker,
+        associated_token::mint = mint_y,
+        associated_token::authority = maker,
+        associated_token::token_program = token_program,
+        
+    )]
+    maker_ata_y: InterfaceAccount<'info, TokenAccount>,
+        #[account(
+        init_if_needed,
+        payer = maker,
+        associated_token::mint = mint_lp,
+        associated_token::authority = maker,
+        associated_token::token_program = token_program,
+        
+    )]
+    maker_ata_lp: InterfaceAccount<'info, TokenAccount>,
     associated_token_program: Program<'info, AssociatedToken>,
     token_program: Interface<'info, TokenInterface>,
     system_program: Program<'info, System>,
@@ -65,5 +92,41 @@ impl<'info> Initialize<'info> {
             bump,
         });
         Ok(())
+    }
+
+    pub fn deposit(&mut self, amount: u64, is_x: bool) -> Result<()> {
+        let (from, to, mint, decimals) = match is_x {
+            true => (self.maker_ata_x.to_account_info(), self.vault_x.to_account_info(), self.mint_x.to_account_info(), self.mint_x.decimals),
+            false => (self.maker_ata_y.to_account_info(), self.vault_y.to_account_info(), self.mint_y.to_account_info(), self.mint_y.decimals),
+        };
+        let cpi_accounts = TransferChecked{ from, mint, to, authority: self.maker.to_account_info() };
+
+        let cpi_program = self.token_program.to_account_info();
+        let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
+        transfer_checked(cpi_ctx, amount, decimals)
+    }
+
+    pub fn mint_lp_tokens(&mut self, amount_x: u64, amount_y: u64) -> Result<()> {
+        let amount = amount_x.checked_mul(amount_y).ok_or(ProgramError::ArithmeticOverflow)?;
+        
+        let cpi_accounts = MintTo {
+            mint: self.mint_lp.to_account_info(),
+            to: self.maker_ata_lp.to_account_info(),
+            authority: self.config.to_account_info(),
+        };
+        
+        let cpi_program = self.token_program.to_account_info();
+        
+        // Create a longer-lived value for the seed bytes
+        let seed_bytes = self.config.seed.to_le_bytes();
+        let signer_seeds: &[&[&[u8]]] = &[&[
+            b"amm",
+            self.mint_x.to_account_info().key.as_ref(),
+            self.mint_y.to_account_info().key.as_ref(),
+            seed_bytes.as_ref(),
+            &[self.config.bump]
+        ]];
+        let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
+        mint_to(cpi_ctx, amount)
     }
 }
