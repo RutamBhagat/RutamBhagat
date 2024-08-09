@@ -11,8 +11,8 @@ use crate::Config;
 pub struct Initialize<'info> {
     #[account(mut)]
     maker: Signer<'info>,
-    mint_x: InterfaceAccount<'info, Mint>,
-    mint_y: InterfaceAccount<'info, Mint>,
+    mint_x: Box<InterfaceAccount<'info, Mint>>,
+    mint_y: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         init,
         payer = maker,
@@ -30,7 +30,7 @@ pub struct Initialize<'info> {
         seeds = [b"amm", config.key().as_ref()],
         bump,
     )]
-    mint_lp: InterfaceAccount<'info, Mint>,
+    mint_lp: Box<InterfaceAccount<'info, Mint>>,
     #[account(
         init_if_needed,
         payer = maker,
@@ -39,7 +39,7 @@ pub struct Initialize<'info> {
         associated_token::token_program = token_program,
 
     )]
-    vault_x: InterfaceAccount<'info, TokenAccount>,
+    vault_x: Box<InterfaceAccount<'info, TokenAccount>>,
     #[account(
         init_if_needed,
         payer = maker,
@@ -48,7 +48,7 @@ pub struct Initialize<'info> {
         associated_token::token_program = token_program,
         
     )]
-    vault_y: InterfaceAccount<'info, TokenAccount>,
+    vault_y: Box<InterfaceAccount<'info, TokenAccount>>,
     #[account(
         init_if_needed,
         payer = maker,
@@ -57,7 +57,7 @@ pub struct Initialize<'info> {
         associated_token::token_program = token_program,
 
     )]
-    maker_ata_x: InterfaceAccount<'info, TokenAccount>,
+    maker_ata_x: Box<InterfaceAccount<'info, TokenAccount>>,
     #[account(
         init_if_needed,
         payer = maker,
@@ -66,7 +66,7 @@ pub struct Initialize<'info> {
         associated_token::token_program = token_program,
         
     )]
-    maker_ata_y: InterfaceAccount<'info, TokenAccount>,
+    maker_ata_y: Box<InterfaceAccount<'info, TokenAccount>>,
         #[account(
         init_if_needed,
         payer = maker,
@@ -75,7 +75,7 @@ pub struct Initialize<'info> {
         associated_token::token_program = token_program,
         
     )]
-    maker_ata_lp: InterfaceAccount<'info, TokenAccount>,
+    maker_ata_lp: Box<InterfaceAccount<'info, TokenAccount>>,
     associated_token_program: Program<'info, AssociatedToken>,
     token_program: Interface<'info, TokenInterface>,
     system_program: Program<'info, System>,
