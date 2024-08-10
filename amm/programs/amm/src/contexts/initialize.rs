@@ -20,7 +20,7 @@ pub struct Initialize<'info> {
         seeds = [b"amm", mint_x.key().as_ref(), mint_y.key().as_ref(), seed.to_le_bytes().as_ref()],
         bump,
     )]
-    config: Account<'info, Config>,
+    config: Box<Account<'info, Config>>,
     #[account(
         init_if_needed,
         payer = maker,
@@ -35,8 +35,7 @@ pub struct Initialize<'info> {
         init_if_needed,
         payer = maker,
         associated_token::mint = mint_x,
-        associated_token::authority = config,
-        associated_token::token_program = token_program,
+        associated_token::authority = config
 
     )]
     vault_x: Box<InterfaceAccount<'info, TokenAccount>>,
@@ -44,26 +43,21 @@ pub struct Initialize<'info> {
         init_if_needed,
         payer = maker,
         associated_token::mint = mint_y,
-        associated_token::authority = config,
-        associated_token::token_program = token_program,
+        associated_token::authority = config
         
     )]
     vault_y: Box<InterfaceAccount<'info, TokenAccount>>,
     #[account(
-        init_if_needed,
-        payer = maker,
+        mut,
         associated_token::mint = mint_x,
-        associated_token::authority = maker,
-        associated_token::token_program = token_program,
+        associated_token::authority = maker
 
     )]
-    maker_ata_x: Box<InterfaceAccount<'info, TokenAccount>>,
+    maker_ata_x: Box<InterfaceAccount<'info, TokenAccount>>,             
     #[account(
-        init_if_needed,
-        payer = maker,
+        mut,
         associated_token::mint = mint_y,
-        associated_token::authority = maker,
-        associated_token::token_program = token_program,
+        associated_token::authority = maker
         
     )]
     maker_ata_y: Box<InterfaceAccount<'info, TokenAccount>>,
@@ -71,8 +65,7 @@ pub struct Initialize<'info> {
         init_if_needed,
         payer = maker,
         associated_token::mint = mint_lp,
-        associated_token::authority = maker,
-        associated_token::token_program = token_program,
+        associated_token::authority = maker
         
     )]
     maker_ata_lp: Box<InterfaceAccount<'info, TokenAccount>>,
