@@ -19,8 +19,7 @@ pub struct Refund<'info> {
     mint_a: InterfaceAccount<'info, Mint>,
 
     #[account(
-        init_if_needed,
-        payer = maker,
+        mut,
         associated_token::mint = mint_a,
         associated_token::authority = maker,
         associated_token::token_program = token_program
