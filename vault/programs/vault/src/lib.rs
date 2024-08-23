@@ -11,18 +11,15 @@ pub mod vault {
 
     pub fn initialize(ctx: Context<Initialize>, lock_duration: Option<i64>) -> Result<()> {
         ctx.accounts
-            .initialize(&ctx.bumps, lock_duration.unwrap_or(0))?;
-        Ok(())
+            .initialize(&ctx.bumps, lock_duration.unwrap_or(0))
     }
 
     pub fn deposit(ctx: Context<Payment>, amount: u64) -> Result<()> {
-        ctx.accounts.deposit(amount)?;
-        Ok(())
+        ctx.accounts.deposit(amount)
     }
 
     pub fn withdraw(ctx: Context<Payment>, amount: u64) -> Result<()> {
-        ctx.accounts.withdraw(amount)?;
-        Ok(())
+        ctx.accounts.withdraw(amount)
     }
 
     pub fn close_account(ctx: Context<CloseAccount>) -> Result<()> {
@@ -84,16 +81,13 @@ pub struct Payment<'info> {
 impl<'info> Payment<'info> {
     pub fn deposit(&mut self, amount: u64) -> Result<()> {
         let cpi_program = self.system_program.to_account_info();
-
         let cpi_accounts = Transfer {
             from: self.user.to_account_info(),
             to: self.vault.to_account_info(),
         };
-
         let cpi_ctx = CpiContext::new(cpi_program, cpi_accounts);
 
-        transfer(cpi_ctx, amount)?;
-        Ok(())
+        transfer(cpi_ctx, amount)
     }
 
     pub fn withdraw(&mut self, amount: u64) -> Result<()> {
@@ -108,20 +102,19 @@ impl<'info> Payment<'info> {
         }
 
         let cpi_program = self.system_program.to_account_info();
-
         let cpi_accounts = Transfer {
             from: self.vault.to_account_info(),
             to: self.user.to_account_info(),
         };
-
-        let vault_bump = self.vault_state.vault_bump;
         let vault_state_key = self.vault_state.key();
-        let signer = [b"vault", vault_state_key.as_ref(), &[vault_bump]];
-        let signer_seeds = &[&signer[..]];
-
+        let signer_seeds: &[&[&[u8]]] = &[&[
+            b"vault",
+            vault_state_key.as_ref(),
+            &[self.vault_state.vault_bump],
+        ]];
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
-        transfer(cpi_ctx, amount)?;
-        Ok(())
+
+        transfer(cpi_ctx, amount)
     }
 }
 
@@ -153,20 +146,24 @@ impl<'info> CloseAccount<'info> {
         }
 
         let vault_balance = self.vault.lamports();
-        if vault_balance > 0 {
-            let cpi_program = self.system_program.to_account_info();
-            let cpi_accounts = Transfer {
-                from: self.vault.to_account_info(),
-                to: self.user.to_account_info(),
-            };
-            let vault_bump = self.vault_state.vault_bump;
-            let vault_state_key = self.vault_state.key();
-            let signer = [b"vault", vault_state_key.as_ref(), &[vault_bump]];
-            let signer_seeds = &[&signer[..]];
-            let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
-            transfer(cpi_ctx, vault_balance)?;
+        if vault_balance <= 0 {
+            return Err(ProgramError::InsufficientFunds.into());
         }
-        Ok(())
+
+        let cpi_program = self.system_program.to_account_info();
+        let cpi_accounts = Transfer {
+            from: self.vault.to_account_info(),
+            to: self.user.to_account_info(),
+        };
+        let vault_state_key = self.vault_state.key();
+        let signer_seeds: &[&[&[u8]]] = &[&[
+            b"vault",
+            vault_state_key.as_ref(),
+            &[self.vault_state.vault_bump],
+        ]];
+
+        let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
+        transfer(cpi_ctx, vault_balance)
     }
 }
 
