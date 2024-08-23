@@ -52,19 +52,17 @@ impl<'info> Refund<'info> {
     pub fn withdraw(&self) -> Result<()> {
         let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = TransferChecked {
-            mint: self.mint_a.to_account_info(),
             from: self.vault.to_account_info(),
             to: self.maker_ata_a.to_account_info(),
+            mint: self.mint_a.to_account_info(),
             authority: self.escrow.to_account_info(),
         };
 
-        let seed = &self.escrow.seed.to_le_bytes();
-        let binding = &[self.escrow.bump];
         let signer_seeds: &[&[&[u8]]] = &[&[
             b"escrow",
             self.maker.to_account_info().key.as_ref(),
-            seed,
-            binding,
+            &self.escrow.seed.to_le_bytes(),
+            &[self.escrow.bump],
         ]];
 
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
@@ -72,22 +70,19 @@ impl<'info> Refund<'info> {
     }
 
     pub fn close(&self) -> Result<()> {
+        let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = CloseAccount {
             account: self.vault.to_account_info(),
             destination: self.maker.to_account_info(),
             authority: self.escrow.to_account_info(),
         };
-
-        let seed = &self.escrow.seed.to_le_bytes();
-        let binding = &[self.escrow.bump];
         let signer_seeds: &[&[&[u8]]] = &[&[
             b"escrow",
             self.maker.to_account_info().key.as_ref(),
-            seed,
-            binding,
+            &self.escrow.seed.to_le_bytes(),
+            &[self.escrow.bump],
         ]];
 
-        let cpi_program = self.token_program.to_account_info();
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
         close_account(cpi_ctx)
     }

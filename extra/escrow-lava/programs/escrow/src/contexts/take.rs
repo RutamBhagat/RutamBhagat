@@ -55,6 +55,7 @@ pub struct Take<'info> {
     #[account(
         mut,
         close = taker,
+        has_one = maker,
         has_one = mint_a,
         has_one = mint_b,
         seeds = [b"escrow", maker.key().as_ref(), escrow.seed.to_le_bytes().as_ref()],
@@ -79,9 +80,9 @@ impl<'info> Take<'info> {
     pub fn transfer_to_maker(&self) -> Result<()> {
         let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = TransferChecked {
-            mint: self.mint_b.to_account_info(),
             from: self.taker_ata_b.to_account_info(),
             to: self.maker_ata_b.to_account_info(),
+            mint: self.mint_b.to_account_info(),
             authority: self.taker.to_account_info(),
         };
 
@@ -92,19 +93,16 @@ impl<'info> Take<'info> {
     pub fn withdraw(&self) -> Result<()> {
         let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = TransferChecked {
-            mint: self.mint_a.to_account_info(),
             from: self.vault.to_account_info(),
             to: self.taker_ata_a.to_account_info(),
+            mint: self.mint_a.to_account_info(),
             authority: self.escrow.to_account_info(),
         };
-
-        let seed = &self.escrow.seed.to_le_bytes();
-        let binding = &[self.escrow.bump];
         let signer_seeds: &[&[&[u8]]] = &[&[
             b"escrow",
             self.maker.to_account_info().key.as_ref(),
-            seed,
-            binding,
+            &self.escrow.seed.to_le_bytes(),
+            &[self.escrow.bump],
         ]];
 
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
@@ -112,22 +110,19 @@ impl<'info> Take<'info> {
     }
 
     pub fn close(&self) -> Result<()> {
+        let cpi_program = self.token_program.to_account_info();
         let cpi_accounts = CloseAccount {
             account: self.vault.to_account_info(),
             destination: self.taker.to_account_info(),
             authority: self.escrow.to_account_info(),
         };
-
-        let seed = &self.escrow.seed.to_le_bytes();
-        let binding = &[self.escrow.bump];
         let signer_seeds: &[&[&[u8]]] = &[&[
             b"escrow",
             self.maker.to_account_info().key.as_ref(),
-            seed,
-            binding,
+            &self.escrow.seed.to_le_bytes(),
+            &[self.escrow.bump],
         ]];
 
-        let cpi_program = self.token_program.to_account_info();
         let cpi_ctx = CpiContext::new_with_signer(cpi_program, cpi_accounts, signer_seeds);
         close_account(cpi_ctx)
     }
