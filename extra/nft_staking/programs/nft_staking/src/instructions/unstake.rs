@@ -1,3 +1,4 @@
+use crate::error::ErrorCode;
 use crate::state::{StakeAccount, StakeConfig, UserAccount};
 use anchor_lang::prelude::*;
 use anchor_spl::{
@@ -70,8 +71,14 @@ pub struct Unstake<'info> {
 
 impl<'info> Unstake<'info> {
     pub fn unstake(&mut self) -> Result<()> {
-        let time_elapsed =
-            ((Clock::get()?.unix_timestamp - self.stake_account.last_update) / 86400) as u32;
+        let time_elapsed = ((Clock::get()?.unix_timestamp - self.stake_account.last_update)
+            / (24 * 60 * 60)) as u32;
+
+        require!(
+            time_elapsed > self.config.freeze_period,
+            ErrorCode::StakeNotMatured
+        );
+
         self.user_account.points +=
             (time_elapsed as u64 * self.config.points_per_stake as u64) as u32;
         // pdas to sign tx
