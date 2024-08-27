@@ -26,7 +26,7 @@ pub struct Stake<'info> {
     #[account(
         mut,
         seeds = [
-            b"metadata".as_ref(), 
+            b"metadata", 
             metadata_program.key().as_ref(),
             mint.key().as_ref(),
         ],
@@ -40,10 +40,10 @@ pub struct Stake<'info> {
     #[account(
         mut,
         seeds = [
-            b"metadata".as_ref(),
+            b"metadata",
             metadata_program.key().as_ref(),
             mint.key().as_ref(),
-            b"edition".as_ref(),
+            b"edition",
         ],
         bump,
         seeds::program = metadata_program.key(),
@@ -53,7 +53,7 @@ pub struct Stake<'info> {
     #[account(
         mut,
         seeds = [
-            b"user".as_ref(),
+            b"user",
             user.key().as_ref(),
         ],
         bump = user_account.bump,
@@ -64,7 +64,7 @@ pub struct Stake<'info> {
         payer = user,
         space = StakeAccount::INIT_SPACE,
         seeds = [
-            b"stake".as_ref(),
+            b"stake",
             mint.key().as_ref(),
             config.key().as_ref(),
         ],
@@ -94,7 +94,7 @@ impl<'info> Stake<'info> {
         approve(cpi_ctx, 1)?;
 
         let signer_seeds: &[&[&[u8]]] = &[&[
-            b"stake".as_ref(),
+            b"stake",
             self.mint.to_account_info().key.as_ref(),
             self.config.to_account_info().key.as_ref(),
             &[self.stake_account.bump],
