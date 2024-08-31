@@ -90,18 +90,32 @@ impl<'info> Purchase<'info> {
             .checked_mul(self.marketplace.fee as u128)
             .unwrap()
             .checked_div(10000)
-            .unwrap();
-        let maker_amount = self.listing.price.checked_sub(fee_amount as u64).unwrap();
+            .unwrap() as u64;
+        let maker_amount = self.listing.price.checked_sub(fee_amount).unwrap();
+
+        let system_program_info = self.system_program.to_account_info();
+        let buyer_info = self.buyer.to_account_info();
+        let treasury_info = self.treasury.to_account_info();
+        let maker_info = self.maker.to_account_info();
 
         // Transfer fee to treasury
         if fee_amount > 0 {
-            let fee_transfer = self.buyer.transfer(&self.treasury, fee_amount as u64);
-            fee_transfer?;
+            let fee_transfer_accounts = anchor_lang::system_program::Transfer {
+                from: buyer_info.clone(),
+                to: treasury_info,
+            };
+            let fee_transfer_ctx =
+                CpiContext::new(system_program_info.clone(), fee_transfer_accounts);
+            anchor_lang::system_program::transfer(fee_transfer_ctx, fee_amount)?;
         }
 
         // Transfer payment to maker
-        let maker_transfer = self.buyer.transfer(&self.maker, maker_amount);
-        maker_transfer?;
+        let maker_transfer_accounts = anchor_lang::system_program::Transfer {
+            from: buyer_info,
+            to: maker_info,
+        };
+        let maker_transfer_ctx = CpiContext::new(system_program_info, maker_transfer_accounts);
+        anchor_lang::system_program::transfer(maker_transfer_ctx, maker_amount)?;
 
         Ok(())
     }
