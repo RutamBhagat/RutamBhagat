@@ -1,0 +1,3 @@
+[submodule "Capstone_NFT_Liquidator"]
+	path = Capstone_NFT_Liquidator
+	url = git@github.com:RutamBhagat/NFT_Liquidator.git
