@@ -1,7 +1,11 @@
+use crate::error;
 use anchor_lang::prelude::*;
 use mpl_core::{
+    accounts::{BaseAssetV1, BaseCollectionV1},
+    fetch_plugin,
+    instructions::{AddPluginV1CpiBuilder, UpdatePluginV1CpiBuilder},
+    types::{Attribute, Attributes, FreezeDelegate, Plugin, PluginAuthority, PluginType},
     ID as MPL_CORE_ID,
-    accounts::{BaseAssetV1, BaseCollectionV1}
 };
 
 #[derive(Accounts)]
@@ -11,24 +15,101 @@ pub struct Stake<'info> {
     #[account(mut)]
     pub payer: Signer<'info>,
     #[account(
-        mut, 
+        mut,
         has_one = owner
     )]
     pub asset: Account<'info, BaseAssetV1>,
     #[account(
-        mut, 
+        mut,
         has_one = update_authority
     )]
     pub collection: Account<'info, BaseCollectionV1>,
     #[account(
-        address = MPL_CORE_ID 
+        address = MPL_CORE_ID
     )]
     /// CHECK: this is safe because we have the address constraint
     pub mpl_core_program: UncheckedAccount<'info>,
-    pub system_program: Program<'info, System>
+    pub system_program: Program<'info, System>,
 }
 
-pub fn handler(_ctx: Context<Stake>) -> Result<()> {
-    // msg!("Greetings from: {{:?}}", ctx.program_id);
+pub fn stake_handler(ctx: Context<Stake>) -> Result<()> {
+    match fetch_plugin::<BaseAssetV1, Attributes>(
+        &ctx.accounts.asset.to_account_info(),
+        PluginType::Attributes,
+    ) {
+        Ok((_, fetched_attribute_list, _)) => {
+            let mut attribute_list: Vec<Attribute> = vec![];
+            let mut is_initialized = false;
+
+            for attribute in fetched_attribute_list.attribute_list {
+                if attribute.key == "staked" {
+                    require!(attribute.value == "0", error::ErrorCode::AlreadyStaked);
+                    attribute_list.push(Attribute {
+                        key: "staked".to_string(),
+                        value: Clock::get()?.unix_timestamp.to_string(),
+                    });
+                    is_initialized = true;
+                } else {
+                    attribute_list.push(attribute);
+                }
+            }
+
+            if !is_initialized {
+                attribute_list.push(Attribute {
+                    key: "staked".to_string(),
+                    value: Clock::get()?.unix_timestamp.to_string(),
+                });
+                attribute_list.push(Attribute {
+                    key: "staked_time".to_string(),
+                    value: "0".to_string(),
+                });
+            }
+
+            UpdatePluginV1CpiBuilder::new(&ctx.accounts.mpl_core_program.to_account_info())
+                .asset(&ctx.accounts.asset.to_account_info())
+                .collection(Some(&ctx.accounts.collection.to_account_info()))
+                .payer(&ctx.accounts.payer.to_account_info())
+                .authority(Some(&ctx.accounts.update_authority.to_account_info()))
+                .system_program(&ctx.accounts.system_program.to_account_info())
+                .plugin(Plugin::Attributes(Attributes { attribute_list }))
+                .invoke()?;
+        }
+        Err(_) => {
+            let mut attribute_list: Vec<Attribute> = vec![];
+
+            attribute_list.push(Attribute {
+                key: "staked".to_string(),
+                value: Clock::get()?.unix_timestamp.to_string(),
+            });
+            attribute_list.push(Attribute {
+                key: "staked_time".to_string(),
+                value: "0".to_string(),
+            });
+
+            AddPluginV1CpiBuilder::new(&ctx.accounts.mpl_core_program.to_account_info())
+                .asset(&ctx.accounts.asset.to_account_info())
+                .collection(Some(&ctx.accounts.collection.to_account_info()))
+                .payer(&ctx.accounts.payer.to_account_info())
+                .authority(Some(&ctx.accounts.update_authority.to_account_info()))
+                .system_program(&ctx.accounts.system_program.to_account_info())
+                .plugin(Plugin::Attributes(Attributes { attribute_list }))
+                .invoke()?;
+        }
+    };
+
+    AddPluginV1CpiBuilder::new(&ctx.accounts.mpl_core_program.to_account_info())
+        .asset(&ctx.accounts.asset.to_account_info())
+        .collection(Some(&ctx.accounts.collection.to_account_info()))
+        .payer(&ctx.accounts.payer.to_account_info())
+        .authority(Some(&ctx.accounts.update_authority.to_account_info()))
+        .system_program(&ctx.accounts.system_program.to_account_info())
+        .plugin(Plugin::FreezeDelegate(FreezeDelegate { frozen: true }))
+        .init_authority(PluginAuthority::UpdateAuthority)
+        .invoke()?;
+
+    Ok(())
+}
+
+pub fn unstake_handler(ctx: Context<Stake>) -> Result<()> {
     Ok(())
 }
