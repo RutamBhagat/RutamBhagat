@@ -1,6 +1,6 @@
 # Introduction
 
-> X: [@rutamstwt](https://x.com/rutamstwt) | Discord: rutamstwt | Email: [rutambhagat@gmail.com](mailto:rutambhagat@gmail.com)
+> Portfolio: [Portfolio](https://rutam-bhagat-llm-portfolio.vercel.app/) | X: [@rutamstwt](https://x.com/rutamstwt) | Discord: rutamstwt | Email: [rutambhagat@gmail.com](mailto:rutambhagat@gmail.com)
 
 # 👋 Hello, I'm Rutam Bhagat
 
