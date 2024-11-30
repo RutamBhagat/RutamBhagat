@@ -1,62 +1,62 @@
 # Introduction
 
-> Portfolio: [https://rutambhagat.vercel.app](https://rutambhagat.vercel.app) | X: [@rutamstwt](https://x.com/rutamstwt) | Discord: rutamstwt | Email: [rutambhagat@gmail.com](mailto:rutambhagat@gmail.com)
+> Portfolio: [https://rutambhagat.me](https://rutambhagat.me) | X: [@rutamstwt](https://x.com/rutamstwt) | Discord: rutamstwt | Email: [rutambhagat@gmail.com](mailto:rutambhagat@gmail.com)
 
-# 👋 Hello, I'm Rutam Bhagat
+# 👋 Hey, I'm Rutam Bhagat
 
-## 🤖 LLM/GenAI Backend Developer Extraordinaire
+## 🤖 LLM/GenAI Backend Developer
 
-Crafting the future of AI, one line of code at a time. I specialize in building robust and scalable backend solutions for Language Models and Generative AI applications.
+I build the backend for Language Model and Generative AI applications. Basically, I make the AI work.
 
-### 🛠️ Services I Offer
+### 🛠️ What I Do
 
 #### 🧠 LLM Integration & Fine-tuning
-- Seamless integration of state-of-the-art language models (e.g., GPT, BERT, LLaMA)
-- Custom fine-tuning for domain-specific applications
-- Optimization for performance and efficiency
+- Integrating state-of-the-art language models (like GPT, BERT, LLaMA)
+- Fine-tuning models for domain-specific applications
+- Optimizing for performance and efficiency
 
 #### 🌐 RAG (Retrieval-Augmented Generation) Systems
-- Design and implementation of advanced RAG pipelines
-- Integration with various data sources and vector databases
-- Custom retrieval strategies for enhanced accuracy
+- Designing and building RAG pipelines
+- Integrating with data sources and vector databases
+- Developing custom retrieval strategies
 
 #### 🔧 Custom AI Agents & Tools
-- Development of AI agents with specific capabilities (e.g., coding assistants, data analysts)
-- Creation of tool-using agents for complex task automation
-- Implementation of multi-agent systems for collaborative problem-solving
+- Building AI agents with specific capabilities (e.g., coding assistants, data analysts)
+- Creating tool-using agents for complex task automation
+- Building multi-agent systems for collaborative problem-solving
 
 #### 📊 AI-Powered Analytics
-- Natural language interfaces for database querying
-- Semantic search implementations
-- AI-driven data analysis and visualization
+- Building natural language interfaces for database querying
+- Implementing semantic search
+- Using AI for data analysis and visualization
 
 #### 🔗 API Development for AI Services
-- RESTful and GraphQL API design for AI functionalities
-- Scalable backend architectures for high-throughput AI applications
-- Security-first approach with proper authentication and rate limiting
+- Designing RESTful and GraphQL APIs for AI functionality
+- Building scalable backends for high-throughput AI applications
+- Ensuring security with authentication and rate limiting
 
 #### 🧪 AI Testing & Quality Assurance
-- Comprehensive testing suites for AI models and applications
-- Bias detection and mitigation strategies
-- Performance benchmarking and optimization
+- Building comprehensive testing for AI models and apps
+- Implementing bias detection and mitigation
+- Benchmarking and optimizing performance
 
 #### 📚 LLM-Powered Knowledge Bases
-- Creation of intelligent, self-updating knowledge bases
-- Implementation of question-answering systems
-- Custom chatbots with domain expertise
+- Creating intelligent, self-updating knowledge bases
+- Implementing question-answering systems
+- Developing custom chatbots
 
 ### 💼 Why Work With Me?
 
-- 🚀 Cutting-edge expertise in the rapidly evolving field of AI
-- 💡 Creative problem-solver with a knack for optimizing AI workflows
-- 🤝 Collaborative approach, ensuring your vision comes to life
-- 📈 Committed to delivering scalable, production-ready solutions
+- 🚀 I have expertise in the fast-moving field of AI.
+- 💡 I'm good at creatively optimizing AI workflows.
+- 🤝 I work with you to bring your vision to life.
+- 📈 I build scalable, production-ready solutions.
 
-### 🌟 Let's Build the Future of AI Together!
+### 🌟 Let's Build!
 
-Whether you're a startup looking to leverage AI or an enterprise aiming to overhaul your backend with cutting-edge LLM technology, I'm here to turn your vision into reality.
+If you're a startup looking to use AI or an enterprise trying to upgrade your backend with LLMs, I can help make it happen.
 
-📫 Reach out to me at [rutambhagat@gmail.com](mailto:rutambhagat@gmail.com) or connect with me on [LinkedIn](https://www.linkedin.com/in/rutam-bhagat/) to discuss!
+📫 Contact me at [rutambhagat@gmail.com](mailto:rutambhagat@gmail.com) or on [LinkedIn](https://www.linkedin.com/in/rutam-bhagat/) to talk more.
 
 <!-- Socials stats -->
 
