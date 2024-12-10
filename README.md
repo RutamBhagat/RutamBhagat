@@ -1,10 +1,6 @@
 # Introduction
 
-> Portfolio: [https://rutambhagat.me](https://rutambhagat.me)
-> Cal.com: [https://cal.com/rutam-bhagat-rutamstwt-uocefl](https://cal.com/rutam-bhagat-rutamstwt-uocefl)
-> Email: [rutambhagat@gmail.com](mailto:rutambhagat@gmail.com)
-> X: [@rutamstwt](https://x.com/rutamstwt)
-> Discord: rutamstwt
+> [Portfolio](https://rutambhagat.me) | [Cal.com](https://cal.com/rutam-bhagat-rutamstwt-uocefl) | [Email](mailto:rutambhagat@gmail.com) | [X: @rutamstwt](https://x.com/rutamstwt) | Discord: rutamstwt
 
 # 👋 Hey, I'm Rutam Bhagat
 
