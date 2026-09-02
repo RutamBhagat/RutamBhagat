@@ -1,6 +1,6 @@
 # Introduction
 
-> [Portfolio](https://rutambhagat.me) | [Cal.com](https://cal.com/rutam-bhagat-rutamstwt-uocefl) | [Email](mailto:rutambhagat@gmail.com) | [X: @rutamstwt](https://x.com/rutamstwt) | Discord: rutamstwt
+> [Portfolio](https://rutam.vercel.app) | [Cal.com](https://cal.com/rutam-bhagat-rutamstwt-uocefl) | [Email](mailto:rutambhagat@gmail.com) | [X: @rutamstwt](https://x.com/rutamstwt) | Discord: rutamstwt
 
 If you're a startup looking to use AI or an enterprise trying to upgrade your backend with LLMs, I can help make it happen.
 
